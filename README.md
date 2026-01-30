@@ -11,5 +11,10 @@ This is a simple PHP program to calculate electricity power, energy, and total c
 - Input fields (Voltage, Current, Current Rate - accept numbers only)
 - When button Calculate is clicked, the form sends data usign POST method
 - After clicking Calculate, the input stay in boxes
-- PHP checks if the form is submitted, if yes, the calculation happened.
+- PHP checks if the form is submitted, if yes, the calculation happened
 - Results (system Power (kW), Total Charge(RM)) appeared on the webpage
+
+## Addition
+- A function CalcElectric24H() was created to calculate electricity usage for 24 hours
+- Energy (kWh) and total charge (RM) are calculated from hour 1 to 24 using a loop
+- A table shows hour, energy (kWh), and total charge (RM) for each hour
