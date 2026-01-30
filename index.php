@@ -2,45 +2,79 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Electricity Calculator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="calculator">
-        <h2>Calculate</h2>
-        <form method="POST">
-            <label>Voltage</label>
-            <input type="number" step="any" name="voltage" value="<?php echo $_POST['voltage'] ?? ''; ?>" required>
-            <span>Voltage (V)</span>
 
-            <label>Current</label>
-            <input type="number" step="any" name="current" value="<?php echo $_POST['current'] ?? ''; ?>" required>
-            <span>Ampere (A)</span>
+<div class="calculator">
+    <h2>Calculate</h2>
 
-            <label>Current Rate</label>
-            <input type="number" step="any" name="rate" value="<?php echo $_POST['rate'] ?? ''; ?>" required>
-            <span>sen/kWh</span>
+    <form method="POST">
+        <label>Voltage</label>
+        <input type="number" step="any" name="voltage" required>
+        <span>Voltage (V)</span>
 
-            <button type="submit">Calculate</button>
-        </form>
+        <label>Current</label>
+        <input type="number" step="any" name="current" required>
+        <span>Ampre (A)</span>
 
-        <?php
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $V = $_POST['voltage'];
-            $A = $_POST['current'];
-            $rate = $_POST['rate'];
+        <label>CURRENT RATE</label>
+        <input type="number" step="any" name="rate" required>
+        <span>sen/kWh</span>
 
-            // Calculate power (kW) and total charge (RM)
-            $power_kW = ($V * $A) / 1000; // Power in kW
-            $total_RM = $power_kW * ($rate / 100); // Total charge in RM
+        <button type="submit">calculate</button>
+    </form>
 
-            echo "<div class='results'>";
-            echo "<p>POWER : " . number_format($power_kW, 5) . " kW</p>";
-            echo "<p>RATE : " . number_format($total_RM, 3) . " RM</p>";
-            echo "</div>";
-        }
-        ?>
+<?php
+function CalcElectric24H($V, $A, $rate)
+{
+    $power = ($V * $A) / 1000; 
+    $data = [];
+
+    for ($hour = 1; $hour <= 24; $hour++) {
+        $energy = $power * $hour;   
+        $total  = $energy * ($rate / 100); 
+
+        $data[] = [
+            'hour' => $hour,
+            'energy' => $energy,
+            'total' => $total
+        ];
+    }
+    return [$power, $data];
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    $V = $_POST['voltage'];
+    $A = $_POST['current'];
+    $rate = $_POST['rate'];
+
+    list($power_kW, $result) = CalcElectric24H($V, $A, $rate);
+?>
+    <div class="results">
+        <p>POWER : <?php echo number_format($power_kW, 5); ?>kw</p>
+        <p>RATE : <?php echo number_format(end($result)['total'], 3); ?>RM</p>
     </div>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Hour</th>
+            <th>Energy (kWh)</th>
+            <th>TOTAL (RM)</th>
+        </tr>
+        <?php $i = 1; foreach ($result as $row) { ?>
+        <tr>
+            <td><?php echo $i++; ?></td>
+            <td><?php echo $row['hour']; ?></td>
+            <td><?php echo number_format($row['energy'], 5); ?></td>
+            <td><?php echo number_format($row['total'], 2); ?></td>
+        </tr>
+        <?php } ?>
+    </table>
+
+<?php } ?>
+</div>
 </body>
 </html>
