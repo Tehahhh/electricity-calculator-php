@@ -4,7 +4,7 @@
 This is a simple PHP program to calculate electricity power, energy, and total charge based on voltage, current, usage hours, and current electricity rate.  
 
 ## What it is about
-- This codd is an electricity calculator
+- This code is an electricity calculator
 - It helps the user calculate power (kW) and electricity cost (RM)
 - HTML is used to create the webpage (input boxes, labels, button)
 - css is linked to make the page look nice and neat (doesn't affect the calculation)
@@ -17,4 +17,4 @@ This is a simple PHP program to calculate electricity power, energy, and total c
 ## Addition
 - A function CalcElectric24H() was created to calculate electricity usage for 24 hours
 - Energy (kWh) and total charge (RM) are calculated from hour 1 to 24 using a loop
-- A table shows hour, energy (kWh), and total charge (RM) for each hour
+- A table shows hour, energy (kWh), and total charge (RM) for each hour.
